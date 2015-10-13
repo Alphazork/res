@@ -1,0 +1,7 @@
+.cBtn, .cWeek{
+	cursor: pointer;
+}
+
+td, table th{
+   text-align: center;   
+}
