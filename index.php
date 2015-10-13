@@ -10,7 +10,6 @@
   <div id="LOGIN_BUTTON">
     <input type="submit" name='Submit' value="LOGIN">
   </div>
-  
 
   <table id="week">
   	<tr>
@@ -37,6 +36,3 @@
   </form>
   </body>
 </html>
-<?php
-mysqli_close($conn);
-?>
