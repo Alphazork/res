@@ -114,4 +114,6 @@ $('.ausw').click(function() {
 		}
 	});
 </script>";
+
+mysqli_close($conn);
 ?> 
