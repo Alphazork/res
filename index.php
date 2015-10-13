@@ -1,17 +1,3 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "Reservierung";
-
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $database);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,10 +7,8 @@ if (!$conn) {
   </head>
   <body> 
   <form action="index.php" method="POST">
-  <div id="inputs">
-    <input type="text" placeholder="Name" name="name">
-    <input type="password" placeholder="Password" name="pass">
-    <input type="submit" name='Submit'>
+  <div id="LOGIN_BUTTON">
+    <input type="submit" name='Submit' value="LOGIN">
   </div>
   
 
