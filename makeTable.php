@@ -29,14 +29,14 @@
     for($i = 0; $i < 12; $i++){
 		$stunde = $i+1;
     	echo "<th>".$wk[$i]."</th>";
-    	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND devideID = $device AND Tag BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
+    	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DevideID = $device AND Tag BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
     	if(mysqli_fetch_array($q) == null){
     		for($d = 0; $d < 5; $d++){
     			echo "<td style='color:rgb(65,166,33);'>Frei</td>";
     		}
     	}else{
 			for($d = 0; $d < 5; $d++){
-    			$q = mysqli_query($conn, "SELECT * FROM res WHERE devideID = $device AND Tag = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Stunde = $stunde");
+    			$q = mysqli_query($conn, "SELECT * FROM res WHERE DevideID = $device AND Tag = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Stunde = $stunde");
     			if(mysqli_fetch_array($q) == null){
     				echo "<td style='color:rgb(65,166,33);'>Frei</td>";
     			}else{
