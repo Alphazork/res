@@ -1,4 +1,9 @@
 <?php
+    //0...3 => Laptops
+    //4...6 => Beamer
+    //7...8 => DVD
+    //9...10 => VHS
+    //11...13 => Medienwägen
 	include("mysql.php");
 	$wk = array(
 		0 => "8:10 - 9:00",
