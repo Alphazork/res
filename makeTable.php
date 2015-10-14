@@ -4,6 +4,24 @@
     //7...8 => DVD
     //9...10 => VHS
     //11...13 => Medienwägen
+    
+    $deviceLookup = array(
+        "0 1",
+        "0 2",
+        "0 3",
+        "0 4",
+        "1 1",
+        "1 2",
+        "1 3",
+        "2 1",
+        "2 2",
+        "3 1",
+        "3 2",
+        "4 1",
+        "4 2",
+        "4 3"
+    );
+    
 	include("mysql.php");
 	$wk = array(
 		0 => "8:10 - 9:00",
@@ -31,23 +49,50 @@
     $week = $_GET["week"];
     $device = $_GET["device"];
     $date = new DateTimeImmutable("last monday +$week week");
+
+    $data = array();
+
+    $q = mysqli_query($conn, "SELECT * FROM res WHERE Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
+
+    while($d = mysqli_fetch_assoc($q)){
+        if(!array_key_exists($d["Date"], $data))$data[$d["Date"]] = array();
+        if(!array_key_exists($d["Stunde"], $data[$d["Date"]]))$data[$d["Date"]][$d["Stunde"]] = array();
+        array_push($data[$d["Date"]][$d["Stunde"]], $d["DeviceID"]);
+    }
+
     for($i = 0; $i < 12; $i++){
-		$stunde = $i+1;
-    	echo "<th>".$wk[$i]."</th>";
-    	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
-    	if(mysqli_fetch_array($q) == null){
-    		for($d = 0; $d < 5; $d++){
+        echo "<th>$wk[$i]</th>";
+        for($d = 0; $d < 5; $d++){
+            $isAvailable = false;
+            if(!array_key_exists($date->modify("+$d days")->format("Y-m-d"), $data)){
+                $isAvailable = true;
+            }else if(!array_key_exists($i+1, $data[$date->modify("+$d days")->format("Y-m-d")])){
+                $isAvailable = true;
+            }else{
+                $res = $data[$date->modify("+$d days")->format("Y-m-d")][$i+1];
+                switch($device){
+                    case 0:
+                        $isAvailable = !!array_diff(array(0,1,2,3), $res);
+                    break;
+                    case 1:
+                        $isAvailable = !!array_diff(array(4,5,6), $res);
+                    break;
+                    case 2:
+                        $isAvailable = !!array_diff(array(7,8), $res);
+                    break;
+                    case 3:
+                        $isAvailable = !!array_diff(array(9,10), $res);
+                    break;
+                    case 4:
+                        $isAvailable = !!array_diff(array(11,12,13), $res);
+                    break;
+                }
+            }
+    		if($isAvailable){
     			echo "<td style='color:rgb(65,166,33);'>Frei</td>";
+    		}else{
+    			echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
     		}
-    	}else{
-			for($d = 0; $d < 5; $d++){
-    			$q = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID = $device AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Stunde = $stunde") or die(mysqli_error($conn));
-    			if(mysqli_fetch_array($q) == null){
-    				echo "<td style='color:rgb(65,166,33);'>Frei</td>";
-    			}else{
-    				echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
-    			}
-			}
     	}
     	echo "<tr>";
     }
