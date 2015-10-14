@@ -21,7 +21,6 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
 if ($_GET["weekSelected"]=="w1") {
 	$sql = "select * FROM res WHERE Tag BETWEEN '".date('Y-m-d',strtotime('last Monday'))."' AND '".date('Y-m-d',strtotime('next Sunday'))."'";
 }
