@@ -9,17 +9,17 @@ $(document).ready(function() {
 
 	$(".cBtn").each(function(i, e){
 		$(e).click(function(){
+			selectedDevice = i;
 			updateTable();
 			updateClasses(i, ".cBtn");
-			selectedDevice = i;
 		});
 	});
 
 	$(".cWeek").each(function(i, e){
 		$(e).click(function(){
+			selectedWeek = i;
 			updateTable();
 			updateClasses(i, ".cWeek");
-			selectedWeek = i;
 		});
 	});
 });

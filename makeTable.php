@@ -32,15 +32,15 @@
     	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND Tag BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
     	if(mysqli_fetch_array($q) == null){
     		for($d = 0; $d < 5; $d++){
-    			echo "<td>Frei</td>";
+    			echo "<td style='color:rgb(65,166,33);'>Frei</td>";
     		}
     	}else{
 			for($d = 0; $d < 5; $d++){
     			$q = mysqli_query($conn, "SELECT * FROM res WHERE Tag = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Stunde = $stunde");
     			if(mysqli_fetch_array($q) == null){
-    				echo "<td>Frei</td>";
+    				echo "<td style='color:rgb(65,166,33);'>Frei</td>";
     			}else{
-    				echo "<td>Reserviert</td>";
+    				echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
     			}
 			}
     	}
