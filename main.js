@@ -12,6 +12,7 @@ $(document).ready(function() {
 			selectedDevice = i;
 			updateTable();
 			updateClasses(i, ".cBtn");
+			console.log(i);
 		});
 	});
 

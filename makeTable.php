@@ -40,7 +40,7 @@
 	echo "<table class='table table-striped'>";
 	echo "<tr>
 				<th>Uhrzeit</th>
-        		<th>Montag</th>
+        		<th id='Montag'>Montag</th>
         		<th>Dienstag</th>
         		<th>Mittwoch</th>
         		<th>Donnerstag</th>
@@ -61,7 +61,8 @@
     }
 
     for($i = 0; $i < 12; $i++){
-        echo "<th>$wk[$i]</th>";
+//<<<<<<< Updated upstream
+        //echo "<th>$wk[$i]</th>";
         for($d = 0; $d < 5; $d++){
             $isAvailable = false;
             if(!array_key_exists($date->modify("+$d days")->format("Y-m-d"), $data)){
@@ -89,12 +90,44 @@
                 }
             }
     		if($isAvailable){
-    			echo "<td style='color:rgb(65,166,33);'>Frei</td>";
+    			//echo "<td style='color:rgb(65,166,33);'>Frei</td>";
     		}else{
-    			echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
+    			//echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
     		}
+//=======
+		$stunde = $i;
+    	echo "<th>".$wk[$i]."</th>";
+    	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
+    	if(mysqli_fetch_array($q) == null){
+    		for($d = 0; $d < 5; $d++){
+    			echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
+    		}
+    	}else{
+			for($d = 0; $d < 5; $d++){
+    			$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."'");
+    			if(mysqli_fetch_array($q) == null){
+    				echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
+    			}else{
+    				echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
+    			}
+			}
+//>>>>>>> Stashed changes
     	}
     	echo "<tr>";
-    }
+    }}
     echo "</table>";
+    echo"<script>
+    $('.frei').each(function(i, e){
+        $(e).click(function(){
+            $.ajax({
+                url: 'insert.php',
+                data: {time:$(e).attr('id'),lehrer:'Max',woche:$week,device:$device},
+                success: function(result){
+                $('#test').html(result);
+                updateTable();
+            } 
+        });
+    });
+    });
+    </script>";
 ?>
