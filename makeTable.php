@@ -5,7 +5,7 @@
     //9...10 => VHS
     //11...13 => Medienwägen
     
-    $deviceLookup = array(4,3,2,2,3);
+    $deviceLookup = array(0,3,4,6,7,8,9,10,11,13);
     
 	include("mysql.php");
 	$wk = array(
@@ -86,13 +86,13 @@
     	//$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
     	//if(mysqli_fetch_array($q) == null){
     		for($d = 0; $d < 5; $d++){
-                for ($a=0; $a < $deviceLookup[$device]; $a++) { 
+                for ($a=$deviceLookup[$device*2]; $a <= $deviceLookup[$device*2+1]; $a++) { 
                     $q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' ");
                     if (mysqli_num_rows($q)==0) {
-                        echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".(4-$a)."/".$deviceLookup[$device]."</td>";
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".($deviceLookup[$device*2+1]+1-$a)."/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                         break;
-                    }else if($a==$deviceLookup[$device]-1){
-                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".$deviceLookup[$device]."</td>";
+                    }else if($a==$deviceLookup[$device*2+1]){
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                     }
                 }
     		}
