@@ -5,22 +5,7 @@
     //9...10 => VHS
     //11...13 => Medienwägen
     
-    $deviceLookup = array(
-        "0 1",
-        "0 2",
-        "0 3",
-        "0 4",
-        "1 1",
-        "1 2",
-        "1 3",
-        "2 1",
-        "2 2",
-        "3 1",
-        "3 2",
-        "4 1",
-        "4 2",
-        "4 3"
-    );
+    $deviceLookup = array(4,3,2,2,3);
     
 	include("mysql.php");
 	$wk = array(
@@ -97,24 +82,33 @@
 //=======
 		$stunde = $i;
     	echo "<th>".$wk[$i]."</th>";
-    	$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
-    	if(mysqli_fetch_array($q) == null){
+
+    	//$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
+    	//if(mysqli_fetch_array($q) == null){
     		for($d = 0; $d < 5; $d++){
-    			echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
+                for ($a=0; $a < $deviceLookup[$device]; $a++) { 
+                    $q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' ");
+                    if (mysqli_num_rows($q)==0) {
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".(4-$a)."/".$deviceLookup[$device]."</td>";
+                        break;
+                    }else if($a==$deviceLookup[$device]-1){
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".$deviceLookup[$device]."</td>";
+                    }
+                }
     		}
-    	}else{
-			for($d = 0; $d < 5; $d++){
-    			$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."'");
-    			if(mysqli_fetch_array($q) == null){
-    				echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
-    			}else{
-    				echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
-    			}
-			}
+    	//}else{
+			//for($d = 0; $d < 5; $d++){
+    			//$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."'");
+    			//if(mysqli_fetch_array($q) == null){
+    			//	echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
+    			//}else{
+    			//	echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(170,17,20);'>Reserviert</td>";
+    			//}
+			//}
 //>>>>>>> Stashed changes
     	}
     	echo "<tr>";
-    }}
+    }//}
     echo "</table>";
     echo"<script>
     $('.frei').each(function(i, e){

@@ -2,10 +2,11 @@
 	cursor: pointer;
 }
 
+.frei{
+	cursor: pointer;
+	border: 1px solid #ddd;
+} 
+
 td, table th{
    text-align: center;   
-}
-
-table td{
-	
 }
