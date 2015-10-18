@@ -10,3 +10,7 @@
 td, table th{
    text-align: center;   
 }
+
+.table-striped{
+	border: 1px solid #ddd;
+}
