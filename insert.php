@@ -12,29 +12,17 @@ $Lehrer=$_GET['lehrer'];
 $when=explode("_", $_GET['time']);
 $woche=$_GET['woche'];
 $device=$_GET['device'];
-echo "Eingeloggt als:".$Lehrer;
 $date = new DateTimeImmutable("last monday +$woche week");
 
 $test=array();
 for ($i=$deviceLookup[$device*2]; $i <= $deviceLookup[$device*2+1]; $i++) { 
 	$q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $i AND Stunde = $when[0] AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' ");
 	if (mysqli_num_rows($q)==0) {
-		$q = mysqli_query($conn, "INSERT INTO res (Date,Stunde,Lehrer,DeviceID) values ('".$date->modify('+'.$when[1].' days')->format("Y-m-d")."',$when[0],0,$i);");
-		break;
+		$test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID BETWEEN 0 AND 3 AND Stunde = $when[0] AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' AND Lehrer = 0");
+		if (mysqli_num_rows($test)==0) {
+			$q = mysqli_query($conn, "INSERT INTO res (Date,Stunde,Lehrer,DeviceID) values ('".$date->modify('+'.$when[1].' days')->format("Y-m-d")."',$when[0],0,$i);");
+			break;
+		}
 	}
 }
-
-//$q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID =  AND Stunde = '".$when[0]."' AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' ");
-//if ($q) {
-//	while ($row = mysqli_fetch_assoc($q)) {
-//		array_push($test, $row['DeviceID']);
-//	}
-//}
-
-//$q = mysqli_query($conn, "INSERT INTO res (Date,Stunde,Lehrer,DeviceID) values ('".$date->modify('+'.$when[1].' days')->format("Y-m-d")."','".$when[0]."',0,'".$device."');");
-//echo ", reserviert:";
-//$q2 = mysqli_query($conn, "SELECT * FROM res WHERE Lehrer ='".$Lehrer."'");
-//while ($row = mysqli_fetch_assoc($q2)) {
-//s	echo " ".$row['DeviceID'];
-//}
 ?>

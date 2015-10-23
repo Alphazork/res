@@ -1,4 +1,5 @@
 <?php
+    $Lehrer = 'das.test';
     //0...3 => Laptops
     //4...6 => Beamer
     //7...8 => DVD
@@ -46,76 +47,34 @@
     }
 
     for($i = 0; $i < 12; $i++){
-//<<<<<<< Updated upstream
-        //echo "<th>$wk[$i]</th>";
         for($d = 0; $d < 5; $d++){
-            $isAvailable = false;
-            if(!array_key_exists($date->modify("+$d days")->format("Y-m-d"), $data)){
-                $isAvailable = true;
-            }else if(!array_key_exists($i+1, $data[$date->modify("+$d days")->format("Y-m-d")])){
-                $isAvailable = true;
-            }else{
-                $res = $data[$date->modify("+$d days")->format("Y-m-d")][$i+1];
-                switch($device){
-                    case 0:
-                        $isAvailable = !!array_diff(array(0,1,2,3), $res);
-                    break;
-                    case 1:
-                        $isAvailable = !!array_diff(array(4,5,6), $res);
-                    break;
-                    case 2:
-                        $isAvailable = !!array_diff(array(7,8), $res);
-                    break;
-                    case 3:
-                        $isAvailable = !!array_diff(array(9,10), $res);
-                    break;
-                    case 4:
-                        $isAvailable = !!array_diff(array(11,12,13), $res);
-                    break;
-                }
-            }
-    		if($isAvailable){
-    			//echo "<td style='color:rgb(65,166,33);'>Frei</td>";
-    		}else{
-    			//echo "<td style='color:rgb(170,17,20);'>Reserviert</td>";
-    		}
-//=======
 		$stunde = $i;
     	echo "<th>".$wk[$i]."</th>";
-
-    	//$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND Date BETWEEN '".$date->format("Y-m-d")."' AND '".$date->modify("+4 days")->format("Y-m-d")."';");
-    	//if(mysqli_fetch_array($q) == null){
     		for($d = 0; $d < 5; $d++){
                 for ($a=$deviceLookup[$device*2]; $a <= $deviceLookup[$device*2+1]; $a++) { 
                     $q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' ");
+                    $test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Lehrer = 0");
                     if (mysqli_num_rows($q)==0) {
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".($deviceLookup[$device*2+1]+1-$a)."/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                         break;
                     }else if($a==$deviceLookup[$device*2+1]){
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
+                    }else if (mysqli_num_rows($test)==1) {
+                        echo "<td class='bes' style='color:#e74c3c;'>Reserviert</td>";
+                        break;
                     }
                 }
     		}
-    	//}else{
-			//for($d = 0; $d < 5; $d++){
-    			//$q = mysqli_query($conn, "SELECT * FROM res WHERE Stunde = $stunde AND DeviceID = $device AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."'");
-    			//if(mysqli_fetch_array($q) == null){
-    			//	echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(65,166,33);'>Frei</td>";
-    			//}else{
-    			//	echo "<td class='frei' id='".$i."_".$d."' style='color:rgb(170,17,20);'>Reserviert</td>";
-    			//}
-			//}
-//>>>>>>> Stashed changes
     	}
     	echo "<tr>";
-    }//}
+    }
     echo "</table>";
     echo"<script>
     $('.frei').each(function(i, e){
         $(e).click(function(){
             $.ajax({
                 url: 'insert.php',
-                data: {time:$(e).attr('id'),lehrer:'Max',woche:$week,device:$device},
+                data: {time:$(e).attr('id'),lehrer:'$Lehrer',woche:$week,device:$device},
                 success: function(result){
                 $('#test').html(result);
                 updateTable();
