@@ -18,9 +18,11 @@ $test=array();
 for ($i=$deviceLookup[$device*2]; $i <= $deviceLookup[$device*2+1]; $i++) { 
 	$q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $i AND Stunde = $when[0] AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' ");
 	if (mysqli_num_rows($q)==0) {
-		$test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID BETWEEN 0 AND 3 AND Stunde = $when[0] AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' AND Lehrer = 0");
+		$a1=$deviceLookup[$device*2];
+		$a2=$deviceLookup[$device*2+1];
+		$test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID BETWEEN $a1 AND $a2 AND Stunde = $when[0] AND Date = '".$date->modify('+'.$when[1].' days')->format("Y-m-d")."' AND Lehrer = '$Lehrer'");
 		if (mysqli_num_rows($test)==0) {
-			$q = mysqli_query($conn, "INSERT INTO res (Date,Stunde,Lehrer,DeviceID) values ('".$date->modify('+'.$when[1].' days')->format("Y-m-d")."',$when[0],0,$i);");
+			$q = mysqli_query($conn, "INSERT INTO res (Date,Stunde,Lehrer,DeviceID) values ('".$date->modify('+'.$when[1].' days')->format("Y-m-d")."',$when[0],'$Lehrer',$i);");
 			break;
 		}
 	}

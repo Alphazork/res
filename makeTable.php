@@ -53,14 +53,14 @@
     		for($d = 0; $d < 5; $d++){
                 for ($a=$deviceLookup[$device*2]; $a <= $deviceLookup[$device*2+1]; $a++) { 
                     $q = mysqli_query($conn,"SELECT DeviceID FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' ");
-                    $test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Lehrer = 0");
+                    $test = mysqli_query($conn, "SELECT * FROM res WHERE DeviceID = $a AND Stunde = $stunde AND Date = '".$date->modify('+'.$d.' days')->format("Y-m-d")."' AND Lehrer = '$Lehrer'");
                     if (mysqli_num_rows($q)==0) {
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".($deviceLookup[$device*2+1]+1-$a)."/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                         break;
                     }else if($a==$deviceLookup[$device*2+1]){
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                     }else if (mysqli_num_rows($test)==1) {
-                        echo "<td class='bes' style='color:#e74c3c;'>Reserviert</td>";
+                        echo "<td class='bes' id='".$i."_".$d."' style='color:#e74c3c;'>Reserviert</td>";
                         break;
                     }
                 }
@@ -82,5 +82,17 @@
         });
     });
     });
+    $('.bes').each(function(i, e){
+            $(e).click(function(){
+                $.ajax({
+                    url: 'remove.php',
+                    data: {time:$(e).attr('id'),lehrer:'$Lehrer',woche:$week,device:$device},
+                    success: function(result){
+                    $('#test').html(result);
+                    updateTable();
+                } 
+            });
+        });
+        });
     </script>";
 ?>

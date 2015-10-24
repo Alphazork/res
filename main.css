@@ -2,7 +2,7 @@
 	cursor: pointer;
 }
 
-.frei{
+.frei, .bes{
 	cursor: pointer;
 	border: 1px solid #ddd;
 } 
