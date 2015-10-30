@@ -24,17 +24,18 @@
 		11 => "18:00 - 18:50"
 		);
 	echo "<table class='table table-striped'>";
-	echo "<tr>
-				<th>Uhrzeit</th>
-        		<th id='Montag'>Montag</th>
-        		<th>Dienstag</th>
-        		<th>Mittwoch</th>
-        		<th>Donnerstag</th>
-        		<th>Freitag</th>
-        	</tr>";
+
     $week = $_GET["week"];
     $device = $_GET["device"];
     $date = new DateTimeImmutable("last monday +$week week");
+    echo "<tr>
+                <th>Uhrzeit</th>
+                <th>Montag ".$date->format("d.m")."</th>
+                <th>Dienstag ".$date->modify("+1 days")->format("d.m")."</th>
+                <th>Mittwoch ".$date->modify("+2 days")->format("d.m")."</th>
+                <th>Donnerstag ".$date->modify("+3 days")->format("d.m")."</th>
+                <th>Freitag ".$date->modify("+4 days")->format("d.m")."</th>
+            </tr>";
 
     $data = array();
 
