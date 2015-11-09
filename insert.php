@@ -6,7 +6,7 @@
     //11...13 => Medienwägen
 include("mysql.php");
 
-$deviceLookup = array(0,3,4,6,7,8,9,10,11,13);
+$deviceLookup = array(0,2,3,5,6,7,8,9,10,11,12,15,16,17);
 
 $Lehrer=$_GET['lehrer'];
 $when=explode("_", $_GET['time']);

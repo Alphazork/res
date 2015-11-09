@@ -6,7 +6,7 @@
     //9...10 => VHS
     //11...13 => Medienwägen
     
-    $deviceLookup = array(0,3,4,6,7,8,9,10,11,13);
+    $deviceLookup = array(0,2,3,5,6,7,8,11,12,13,14,17);
     
 	include("mysql.php");
 	$wk = array(
@@ -59,7 +59,7 @@
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".($deviceLookup[$device*2+1]+1-$a)."/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                         break;
                     }else if($a==$deviceLookup[$device*2+1]){
-                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Frei 0/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Keine Frei</td>";
                     }else if (mysqli_num_rows($test)==1) {
                         echo "<td class='bes' id='".$i."_".$d."' style='color:#e74c3c;'>Reserviert</td>";
                         break;
