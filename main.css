@@ -5,6 +5,7 @@
 .frei, .bes{
 	cursor: pointer;
 	border: 1px solid #ddd;
+	font-size: 1.1em;
 } 
 
 td, table th{
@@ -19,3 +20,15 @@ td, table th{
     display: block;
     margin-top: 0;
  }
+
+ #T{
+ 	border-collapse: collapse;
+ 	border:1px solid black;
+ 	margin:0 auto;
+ }
+ #T tr,td{
+ 	border:1px solid black;
+ }
+#T td{
+	padding: 2px;
+}

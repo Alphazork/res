@@ -1,5 +1,5 @@
 <?php
-    $Lehrer = 'das.test';
+    $Lehrer = 'Meister';
     //0...3 => Laptops
     //4...6 => Beamer
     //7...8 => DVD
@@ -59,9 +59,9 @@
                         echo "<td class='frei' id='".$i."_".$d."' style='color:#2ecc71;'>Frei ".($deviceLookup[$device*2+1]+1-$a)."/".($deviceLookup[$device*2+1]-$deviceLookup[$device*2]+1)."</td>";
                         break;
                     }else if($a==$deviceLookup[$device*2+1]){
-                        echo "<td class='frei' id='".$i."_".$d."' style='color:#e74c3c;'>Keine Frei</td>";
+                        echo "<td class='frei' id='".$i."_".$d."' style='color:#limegreen;'>Keine Frei</td>";
                     }else if (mysqli_num_rows($test)==1) {
-                        echo "<td class='bes' id='".$i."_".$d."' style='color:#e74c3c;'>Reserviert</td>";
+                        echo "<td class='bes' id='".$i."_".$d."' style='color:#CF000F;'>RESERVIERT</td>";
                         break;
                     }
                 }
@@ -70,6 +70,26 @@
     	echo "<tr>";
     }
     echo "</table>";
+    if ($Lehrer == "Meister") {
+        echo "<table id='T'>";
+        echo "<tr>";
+            echo "<td>Datum</td>";
+            echo "<td>Stunde</td>";
+            echo "<td>Lehrer</td>";
+            echo "<td>DeviceID</td>";
+            echo "</tr>";
+        $test = mysqli_query($conn, "SELECT * FROM res ORDER BY Date ASC");
+        while ($row = mysqli_fetch_array($test)) {
+            echo "<tr>";
+            echo "<td>".$row["Date"]."</td>";
+            echo "<td>".$row["Stunde"]."</td>";
+            echo "<td>".$row["Lehrer"]."</td>";
+            echo "<td>".$row["DeviceID"]."</td>";
+            echo "</tr>";
+        }
+       
+        echo "</table>";
+    }
     echo"<script>
     $('.frei').each(function(i, e){
         $(e).click(function(){
@@ -78,6 +98,7 @@
                 data: {time:$(e).attr('id'),lehrer:'$Lehrer',woche:$week,device:$device},
                 success: function(result){
                 $('#test').html(result);
+                //alert('Es wurde '+$device+' um '+$(e).attr('id')+' reserviert');
                 updateTable();
             } 
         });
