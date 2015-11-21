@@ -26,10 +26,20 @@ $(document).ready(function() {
 });
 
 function updateClasses(idx, str){
+	$("#dropdown1").removeClass("active");
+	$("#dropdown2").removeClass("active");
 	$(str).each(function(i, e){
 		$(e).removeClass("active");
 		if(i == idx)$(e).addClass("active");
 	});
+
+	if(idx == 0 || idx == 1){
+		$("#dropdown1").addClass("active");
+	}
+
+	if(idx ==2 || idx == 3){
+		$("#dropdown2").addClass("active");
+	}
 }
 
 function getWeek(i){

@@ -6,7 +6,7 @@
     //9...10 => VHS
     //11...13 => Medienwägen
     
-    $deviceLookup = array(0,2,3,5,6,7,8,11,12,13,14,17);
+    $deviceLookup = array(0,2,3,5,6,7,8,9,10,11,12,15,16,17);
     
 	include("mysql.php");
 	$wk = array(
@@ -71,12 +71,12 @@
     }
     echo "</table>";
     if ($Lehrer == "Meister") {
-        echo "<table id='T'>";
+        echo "<table class='table table-striped'>";
         echo "<tr>";
-            echo "<td>Datum</td>";
-            echo "<td>Stunde</td>";
-            echo "<td>Lehrer</td>";
-            echo "<td>DeviceID</td>";
+            echo "<th>Datum</th>";
+            echo "<th>Stunde</th>";
+            echo "<th>Lehrer</th>";
+            echo "<th>DeviceID</th>";
             echo "</tr>";
         $test = mysqli_query($conn, "SELECT * FROM res ORDER BY Date ASC");
         while ($row = mysqli_fetch_array($test)) {
