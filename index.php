@@ -1,3 +1,8 @@
+<?php
+  session_start();
+  $_SESSION["user"] = "vor.nachname";
+?>
+
 <html lang="en">
   <head>
     <title>Wenzgasse Reservierungen</title>
@@ -22,7 +27,9 @@
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             </button>
-            <a class="navbar-brand" href="#">Reservierungen</a>
+            <a class="navbar-brand" id="reservierungen" href="#">Reservierungen
+              <p id="nameDisplay"><?php echo $_SESSION["user"]; ?></p>
+            </a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">

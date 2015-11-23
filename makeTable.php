@@ -1,10 +1,13 @@
 <?php
-    $Lehrer = 'Meister';
-    //0...3 => Laptops
-    //4...6 => Beamer
-    //7...8 => DVD
-    //9...10 => VHS
-    //11...13 => Medienwägen
+    session_start();
+    $Lehrer = $_SESSION["user"];
+    //0...2 => Dell Laptops
+    //3...5 => HP Laptops
+    //6...7 => Beamer Medienwagen
+    //8...9 => Fernseher Medienwagen
+    //10...11 => Beamer
+    //12...15 => DVD
+    //16...17 => VHS
     
     $deviceLookup = array(0,2,3,5,6,7,8,9,10,11,12,15,16,17);
     
@@ -23,6 +26,28 @@
 		10 => "17:10 - 18:00",
 		11 => "18:00 - 18:50"
 		);
+
+    $deviceName = array(
+        0  => "Laptop(DELL) 1",
+        1  => "Laptop(DELL) 2",
+        2  => "Laptop(DELL) 3",
+        3  => "Laptop(HP) 1",
+        4  => "Laptop(HP) 2",
+        5  => "Laptop(HP) 3",
+        6  => "Medienwagen(Beamer) 1",
+        7  => "Medienwagen(Beamer) 2",
+        8  => "Medienwagen(Fernseher) 1",
+        9 => "Medienwagen(Fernseher) 2",
+        10 => "Beamer 1",
+        11 => "Beamer 2",
+        12 => "DVD 1",
+        13 => "DVD 2",
+        14 => "DVD 3",
+        15 => "DVD 4",
+        16 => "VHS 2",
+        17 => "VHS 3",
+    );
+
 	echo "<table class='table table-striped'>";
 
     $week = $_GET["week"];
@@ -70,21 +95,21 @@
     	echo "<tr>";
     }
     echo "</table>";
-    if ($Lehrer == "Meister") {
+    if ($Lehrer == "vor.nachname") {
         echo "<table class='table table-striped'>";
         echo "<tr>";
             echo "<th>Datum</th>";
             echo "<th>Stunde</th>";
             echo "<th>Lehrer</th>";
-            echo "<th>DeviceID</th>";
+            echo "<th>Gerät</th>";
             echo "</tr>";
         $test = mysqli_query($conn, "SELECT * FROM res ORDER BY Date ASC");
         while ($row = mysqli_fetch_array($test)) {
             echo "<tr>";
             echo "<td>".$row["Date"]."</td>";
-            echo "<td>".$row["Stunde"]."</td>";
+            echo "<td>".($row["Stunde"]+1)."</td>";
             echo "<td>".$row["Lehrer"]."</td>";
-            echo "<td>".$row["DeviceID"]."</td>";
+            echo "<td>".$deviceName[$row["DeviceID"]]."</td>";
             echo "</tr>";
         }
        
@@ -95,7 +120,7 @@
         $(e).click(function(){
             $.ajax({
                 url: 'insert.php',
-                data: {time:$(e).attr('id'),lehrer:'$Lehrer',woche:$week,device:$device},
+                data: {time:$(e).attr('id'),woche:$week,device:$device},
                 success: function(result){
                 $('#test').html(result);
                 //alert('Es wurde '+$device+' um '+$(e).attr('id')+' reserviert');
@@ -108,7 +133,7 @@
             $(e).click(function(){
                 $.ajax({
                     url: 'remove.php',
-                    data: {time:$(e).attr('id'),lehrer:'$Lehrer',woche:$week,device:$device},
+                    data: {time:$(e).attr('id'),woche:$week,device:$device},
                     success: function(result){
                     $('#test').html(result);
                     updateTable();
